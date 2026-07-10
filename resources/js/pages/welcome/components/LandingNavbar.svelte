@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { slide } from 'svelte/transition';
     import type { HotelLandingData } from '@/pages/welcome/hotel-data';
 
     let { hotel }: { hotel: HotelLandingData } = $props();
@@ -59,13 +60,13 @@
 
             <button
                 type="button"
-                class="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-white/35 bg-white/10 text-white transition hover:bg-white/20 lg:hidden"
+                class="ml-auto inline-flex h-11 w-11 items-center justify-center text-2xl text-white transition-all duration-200 hover:text-[#ffcf5a] lg:hidden"
                 aria-label="Toggle menu"
                 onclick={() => (isMobileMenuOpen = !isMobileMenuOpen)}
             >
-                <span class="text-lg leading-none"
-                    >{isMobileMenuOpen ? '✕' : '☰'}</span
-                >
+                <span class:rotate-90={isMobileMenuOpen} class="inline-block transition-transform duration-300">
+                    {isMobileMenuOpen ? '✕' : '☰'}
+                </span>
             </button>
         </div>
     </div>
@@ -76,13 +77,15 @@
         >
             <div
                 class="rounded-xl border border-white/16 bg-[#082f29]/88 px-4 py-4 text-white backdrop-blur-xl"
+                transition:slide={{ duration: 300, axis: 'y' }}
             >
                 <nav class="flex flex-col gap-3">
-                    {#each navigationItems as item (item.href)}
+                    {#each navigationItems as item, i (item.href)}
                         <a
                             href={item.href}
                             class="rounded-md px-2 py-1.5 text-sm font-semibold text-white/90 hover:bg-white/10"
                             onclick={() => (isMobileMenuOpen = false)}
+                            style="transition-delay: {i * 50}ms"
                         >
                             {item.label}
                         </a>
